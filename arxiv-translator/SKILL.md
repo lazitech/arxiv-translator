@@ -80,12 +80,14 @@ python3 {SKILL_DIR}/scripts/compile.py "$WORK_DIR" "$MAIN_TEX" "$OUTPUT_DIR/$PDF
 ```
 
 `compile.py` 会统一完成以下编译前处理：
-- 若检测到中文且主文件尚无 CJK 支持，自动在主文件 preamble 中补入 LuaLaTeX 所需中文支持；
-- 自动注释掉与 Unicode 编译栈冲突的 `fontenc` / `inputenc`；
+- 若检测到中文且主文件尚无 CJK 支持，自动在主文件 preamble 中补入 `xeCJK` 所需中文支持；
+- 自动注释掉与 Unicode 编译栈冲突的 `fontenc` / `inputenc` / `\pdfoutput`；
 - 自动识别 `bibtex` / `biber` / 已内置 `.bbl` 的情况；
-- 自动忽略常见编译中间文件与未被源码引用的游离 PDF，避免把无关产物上传到远端编译服务。
+- 自动执行 xelatex → bibtex/biber → xelatex → xelatex 本地编译流水线。
 
-编译失败时：读取 stderr 中的错误日志，参考 `references/compile-errors.md` 修复源码，重新编译（最多重试 2 次）。
+环境要求：本地需安装 TeX Live（含 xelatex、bibtex 及 Noto Serif CJK SC 字体）。
+
+编译失败时：读取 stderr 和 `.log` 中的错误日志，参考 `references/compile-errors.md` 修复源码，重新编译（最多重试 2 次）。
 
 编译成功后清理掉中间文件：
 
